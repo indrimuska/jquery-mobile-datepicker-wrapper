@@ -1,6 +1,7 @@
 (function( $, undefined ) {
-	$.widget("mobile.date", {
+	$.widget("mobile.date", $.mobile.widget, {
 		options:{
+			initSelector: ":jqmData(role=date)",
 			defaultDate: null,                  // Used when field is blank: actual date,
 			                                    // +/-number for offset from today, null for today
 			appendText: "",                     // Display text following the input box, e.g. showing the format
@@ -43,7 +44,7 @@
 			autoSize: false,                    // True to size the input for the date format, false to leave as is
 			disabled: false,                    // The initial disabled state
 			inline: false,                      // True to set the calendar always visible
-			theme: "c"                          // Default theme
+			theme: "c",                         // Default theme
 		},
 		_create: function(){
 			var calendar, interval,
@@ -61,13 +62,6 @@
 					}, 0);
 				}
 			});
-			
-			if (this.element.data('theme')) {
-				this.options.theme = this.element.data('theme');
-			}
-			if (this.element.data('inline')) {
-				this.options.inline = !!this.element.data('inline');
-			}
 			
 			if( this.options.inline ){
 				this.options.altField = this.element;
@@ -139,5 +133,9 @@
 				.find('.ui-datepicker-calendar td>a.ui-state-highlight').addClass('ui-btn-up-' + this.options.theme);
 		}
 	});
-
+	
+	$.mobile.document.bind( "pagecreate create", function( e ) {
+		$.mobile.date.prototype.enhanceWithin( e.target, true );
+	});
+	
 })( jQuery );
